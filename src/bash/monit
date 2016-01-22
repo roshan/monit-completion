@@ -1,12 +1,12 @@
-# bash completion for monit
+# bash completion for monit-dev
 
-_monit_complete() {
+_monit_dev_complete() {
     local cur
     cur="${COMP_WORDS[COMP_CWORD]}"
     prev="${COMP_WORDS[COMP_CWORD-1]}"
 
-    apps=$(monit summary | tail -n +3 |  awk '{gsub(/'"'"'/, "", $2); print $2}' 2>/dev/null)
-    opts=$(monit -h | grep '^\s*-' | awk '{print $1;}' 2>/dev/null)
+    apps=$(monit-dev summary | tail -n +3 |  awk '{gsub(/'"'"'/, "", $2); print $2}' 2>/dev/null)
+    opts=$(monit-dev -h | grep '^\s*-' | awk '{print $1;}' 2>/dev/null)
 
     case ${prev} in
         start|stop|status|summary|restart|monitor|unmonitor)
@@ -28,7 +28,7 @@ _monit_complete() {
 
     return 0
 }
-complete -f _monit_complete monit
+complete -f _monit_dev_complete monit-dev
 
 # Local variables:
 # mode: shell-script
