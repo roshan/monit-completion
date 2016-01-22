@@ -1,0 +1,39 @@
+# bash completion for monit
+
+_monit_complete() {
+    local cur
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+
+    apps=$(monit summary | tail -n +3 |  awk '{gsub(/'"'"'/, "", $2); print $2}' 2>/dev/null)
+    opts=$(monit -h | grep '^\s*-' | awk '{print $1;}' 2>/dev/null)
+
+    case ${prev} in
+        start|stop|status|summary|restart|monitor|unmonitor)
+            COMPREPLY=( $( compgen -W '${apps} all' -- "$cur" ) )
+            return 0
+            ;;
+    esac
+
+    case ${cur} in
+        -*)
+            COMPREPLY=( $( compgen -W '${opts}' -- "$cur" ) )
+            return 0
+            ;;
+        *)
+            COMPREPLY=( $( compgen -W '${opts} start stop status summary restart monitor unmonitor reload quit validate procmatch' -- "${cur}" ) )
+            return 0
+            ;;
+    esac
+
+    return 0
+}
+complete -f _monit_complete monit
+
+# Local variables:
+# mode: shell-script
+# sh-basic-offset: 4
+# sh-indent-comment: t
+# indent-tabs-mode: nil
+# End:
+# ex: ts=4 sw=4 et filetype=sh
