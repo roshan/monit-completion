@@ -28,7 +28,7 @@ _monit_complete() {
 
     return 0
 }
-complete -f _monit_complete monit
+complete -F _monit_complete monit
 
 # Local variables:
 # mode: shell-script
