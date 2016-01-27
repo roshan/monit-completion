@@ -1,7 +1,7 @@
 # bash completion for monit
 
 _monit_complete() {
-    local cur
+    local cur prev
     cur="${COMP_WORDS[COMP_CWORD]}"
     prev="${COMP_WORDS[COMP_CWORD-1]}"
 
@@ -9,8 +9,12 @@ _monit_complete() {
     opts=$(monit -h | grep '^\s*-' | awk '{print $1;}' 2>/dev/null)
 
     case ${prev} in
-        start|stop|status|summary|restart|monitor|unmonitor)
+        start|stop|restart|monitor|unmonitor)
             COMPREPLY=( $( compgen -W '${apps} all' -- "$cur" ) )
+            return 0
+            ;;
+        status|summary)
+            COMPREPLY=( $( compgen -W '${apps}' -- "$cur" ) )
             return 0
             ;;
     esac
